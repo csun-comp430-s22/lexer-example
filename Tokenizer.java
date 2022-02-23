@@ -28,7 +28,8 @@ public class Tokenizer {
     // Token: variable(intxy)
     //
     public void skipWhitespace() {
-        while (Character.isWhitespace(input.charAt(offset))) {
+        while (offset < input.length() &&
+               Character.isWhitespace(input.charAt(offset))) {
             offset++;
         }
     }
