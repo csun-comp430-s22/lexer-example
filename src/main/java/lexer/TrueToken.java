@@ -1,3 +1,5 @@
+package lexer;
+
 // Token t1 = new TrueToken();
 // Token t2 = new TrueToken();
 // t1.equals(t2)?  // currently false

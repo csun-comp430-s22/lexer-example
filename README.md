@@ -35,3 +35,16 @@ Algebraic data types
               List<Token>
 public static Token[] tokenize(String input) { ... }
 ```
+
+Problems:
+
+- Should have a helper method to cut down on what we need to do to tokenize things
+- Need whitespace before/after
+- Multiple tokens
+- Test all the tokens
+- Reducing redundancy between tests
+
+Want:
+- Unit testing framework (show output saying which tests pass / fail, won't bring down all tests on a failure)
+- Library: JUnit
+- Build tool - maven
