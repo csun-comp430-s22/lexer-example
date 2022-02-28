@@ -2,18 +2,27 @@ package lexer;
 
 import java.util.List;
 
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
+import org.junit.Test;
+
 public class TokenizerTest {
-    public static void testEmptyString() throws TokenizerException {
+    // annotation
+    @Test
+    public void testEmptyString() throws TokenizerException {
         // check that tokenizing empty string works
         Tokenizer tokenizer = new Tokenizer("");
         List<Token> tokens = tokenizer.tokenize();
-        assert(tokens.size() == 0);
+        assertEquals(0, tokens.size());
+        //assertTrue(tokens.size() == 0);
     }
 
-    public static void testOnlyWhitespace() throws TokenizerException {
+    @Test
+    public void testOnlyWhitespace() throws TokenizerException {
         Tokenizer tokenizer = new Tokenizer("    ");
         List<Token> tokens = tokenizer.tokenize();
-        assert(tokens.size() == 0);
+        assertEquals(0, tokens.size());
+        //assertTrue(tokens.size() == 0);
     }
 
     // "true"
@@ -23,20 +32,21 @@ public class TokenizerTest {
     // "true false"
     // "truefalse"
     // "(true"
-    public static void testTrueByItself() throws TokenizerException {
+    @Test
+    public void testTrueByItself() throws TokenizerException {
         Tokenizer tokenizer = new Tokenizer("true");
         List<Token> tokens = tokenizer.tokenize();
-        assert(tokens.size() == 1);
+        assertEquals(1, tokens.size());
         Token trueToken = tokens.get(0);
-        assert(trueToken instanceof TrueToken);
+        assertTrue(trueToken instanceof TrueToken);
     }
 
     // Test-driven development: write tests first
     // 1. TokenizerTest.  Compile and run.
     // 2. Tokens/Tokenizer
-    public static void main(String[] args) throws TokenizerException {
-        testOnlyWhitespace();
-        testEmptyString();
-        testTrueByItself();
-    }
+    // public static void main(String[] args) throws TokenizerException {
+    //     testOnlyWhitespace();
+    //     testEmptyString();
+    //     testTrueByItself();
+    // }
 }
