@@ -6,7 +6,8 @@ Example lexer code for a small language
 md - markdown, markup language, like HTML
 
 ```
-exp ::= true | false | if (exp) { exp } else { exp }
+x is a variable
+exp ::= x | true | false | if (exp) { exp } else { exp }
 ```
 
 data Token = TrueToken | FalseToken | IfToken | LeftParenToken ...
@@ -20,6 +21,7 @@ Possible tokens:
 - `{`
 - `}`
 - `else`
+- variable
 
 Algebraic data types
 - One type, but different ways to make that type
