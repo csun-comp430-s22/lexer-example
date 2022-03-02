@@ -4,25 +4,34 @@ import java.util.List;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.fail;
+
 import org.junit.Test;
 
 public class TokenizerTest {
+    public void assertTokenizes(final String input,
+                                final Token[] expected) {
+        try {
+            final Tokenizer tokenizer = new Tokenizer(input);
+            final List<Token> received = tokenizer.tokenize();
+            assertArrayEquals(expected,
+                              received.toArray(new Token[received.size()]));
+        } catch (final TokenizerException e) {
+            fail("Tokenizer threw exception");
+        }
+    }
+    
     // annotation
     @Test
-    public void testEmptyString() throws TokenizerException {
+    public void testEmptyString() {
         // check that tokenizing empty string works
-        Tokenizer tokenizer = new Tokenizer("");
-        List<Token> tokens = tokenizer.tokenize();
-        assertEquals(0, tokens.size());
-        //assertTrue(tokens.size() == 0);
+        assertTokenizes("", new Token[0]);
     }
 
     @Test
     public void testOnlyWhitespace() throws TokenizerException {
-        Tokenizer tokenizer = new Tokenizer("    ");
-        List<Token> tokens = tokenizer.tokenize();
-        assertEquals(0, tokens.size());
-        //assertTrue(tokens.size() == 0);
+        assertTokenizes("    ", new Token[0]);
     }
 
     // "true"
@@ -34,13 +43,14 @@ public class TokenizerTest {
     // "(true"
     @Test
     public void testTrueByItself() throws TokenizerException {
-        Tokenizer tokenizer = new Tokenizer("true");
-        List<Token> tokens = tokenizer.tokenize();
-        assertEquals(1, tokens.size());
-        Token trueToken = tokens.get(0);
-        assertTrue(trueToken instanceof TrueToken);
+        assertTokenizes("true",
+                        new Token[] { new TrueToken() });
     }
-
+    
+    // foo
+    // @Test
+    // public void testVariable() throws TokenizerException {
+        
     // Test-driven development: write tests first
     // 1. TokenizerTest.  Compile and run.
     // 2. Tokens/Tokenizer
