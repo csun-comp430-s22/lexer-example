@@ -109,33 +109,38 @@ public class Tokenizer {
             return null;
         }
     }
+
+    // returns null if it couldn't read in a symbol
+    public Token tryTokenizeSymbol() {
+        skipWhitespace();
+        Token retval = null;
+        
+        if (input.startsWith("(", offset)) {
+            offset += 1;
+            retval = new LeftParenToken();
+        } else if (input.startsWith(")", offset)) {
+            offset += 1;
+            retval = new RightParenToken();
+        }  else if (input.startsWith("{", offset)) {
+            offset += 1;
+            retval = new LeftCurlyToken();
+        } else if (input.startsWith("}", offset)) {
+            offset += 1;
+            retval = new RightCurlyToken();
+        }
+
+        return retval;
+    }
     
     // returns null if there are no more tokens left
     public Token tokenizeSingle() throws TokenizerException {
         Token retval = null;
         skipWhitespace();
-        if (offset < input.length()) {
-            retval = tryTokenizeVariableOrKeyword();
-            if (retval == null) {
-                retval = tryTokenizeInteger();
-                if (retval == null) {
-                    if (input.startsWith("(", offset)) {
-                        offset += 1;
-                        retval = new LeftParenToken();
-                    } else if (input.startsWith(")", offset)) {
-                        offset += 1;
-                        retval = new RightParenToken();
-                    }  else if (input.startsWith("{", offset)) {
-                        offset += 1;
-                        retval = new LeftCurlyToken();
-                    } else if (input.startsWith("}", offset)) {
-                        offset += 1;
-                        retval = new RightCurlyToken();
-                    } else {
-                        throw new TokenizerException();
-                    }
-                }
-            }
+        if (offset < input.length() &&
+            (retval = tryTokenizeVariableOrKeyword()) == null &&
+            (retval = tryTokenizeInteger()) == null &&
+            (retval = tryTokenizeSymbol()) == null) {
+            throw new TokenizerException();
         }
 
         return retval;
