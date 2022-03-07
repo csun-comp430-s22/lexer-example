@@ -30,7 +30,7 @@ public class TokenizerTest {
     }
 
     @Test
-    public void testOnlyWhitespace() throws TokenizerException {
+    public void testOnlyWhitespace() {
         assertTokenizes("    ", new Token[0]);
     }
 
@@ -42,15 +42,46 @@ public class TokenizerTest {
     // "truefalse"
     // "(true"
     @Test
-    public void testTrueByItself() throws TokenizerException {
+    public void testTrueByItself() {
         assertTokenizes("true",
                         new Token[] { new TrueToken() });
     }
     
     // foo
-    // @Test
-    // public void testVariable() throws TokenizerException {
-        
+    @Test
+    public void testVariable() {
+        assertTokenizes("foo",
+                        new Token[] { new VariableToken("foo") });
+    }
+
+    // truetrue
+    @Test
+    public void testTrueTrueIsVariable() {
+        assertTokenizes("truetrue",
+                        new Token[]{ new VariableToken("truetrue") });
+    }
+
+    // true true
+    @Test
+    public void testTrueSpaceTrueAreTrueTokens() {
+        assertTokenizes("true true",
+                        new Token[]{ new TrueToken(), new TrueToken() });
+    }
+
+    @Test
+    public void testAllRemaining() {
+        assertTokenizes("(){}else if false",
+                        new Token[]{
+                            new LeftParenToken(),
+                            new RightParenToken(),
+                            new LeftCurlyToken(),
+                            new RightCurlyToken(),
+                            new ElseToken(),
+                            new IfToken(),
+                            new FalseToken()
+                        });
+    }
+    
     // Test-driven development: write tests first
     // 1. TokenizerTest.  Compile and run.
     // 2. Tokens/Tokenizer
