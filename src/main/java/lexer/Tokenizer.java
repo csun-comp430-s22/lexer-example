@@ -45,6 +45,27 @@ public class Tokenizer {
         }
     }
 
+    // returns null if it wasn't an integer token
+    public IntegerToken tryTokenizeInteger() {
+        skipWhitespace();
+
+        // 12345
+        String number = "";
+
+        while (offset < input.length() &&
+               Character.isDigit(input.charAt(offset))) {
+            number += input.charAt(offset);
+            offset++;
+        }
+
+        if (number.length() > 0) {
+            // convert string to an integer
+            return new IntegerToken(Integer.parseInt(number));
+        } else {
+            return null;
+        }
+    }
+    
     // returns null if it fails to read in any variable or keyword
     public Token tryTokenizeVariableOrKeyword() {
         skipWhitespace();
@@ -96,20 +117,23 @@ public class Tokenizer {
         if (offset < input.length()) {
             retval = tryTokenizeVariableOrKeyword();
             if (retval == null) {
-                if (input.startsWith("(", offset)) {
-                    offset += 1;
-                    retval = new LeftParenToken();
-                } else if (input.startsWith(")", offset)) {
-                    offset += 1;
-                    retval = new RightParenToken();
-                }  else if (input.startsWith("{", offset)) {
-                    offset += 1;
-                    retval = new LeftCurlyToken();
-                } else if (input.startsWith("}", offset)) {
-                    offset += 1;
-                    retval = new RightCurlyToken();
-                } else {
-                    throw new TokenizerException();
+                retval = tryTokenizeInteger();
+                if (retval == null) {
+                    if (input.startsWith("(", offset)) {
+                        offset += 1;
+                        retval = new LeftParenToken();
+                    } else if (input.startsWith(")", offset)) {
+                        offset += 1;
+                        retval = new RightParenToken();
+                    }  else if (input.startsWith("{", offset)) {
+                        offset += 1;
+                        retval = new LeftCurlyToken();
+                    } else if (input.startsWith("}", offset)) {
+                        offset += 1;
+                        retval = new RightCurlyToken();
+                    } else {
+                        throw new TokenizerException();
+                    }
                 }
             }
         }

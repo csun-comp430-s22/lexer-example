@@ -7,7 +7,8 @@ md - markdown, markup language, like HTML
 
 ```
 x is a variable
-exp ::= x | true | false | if (exp) { exp } else { exp }
+i is an integer
+exp ::= x | i | true | false | if (exp) { exp } else { exp }
 ```
 
 data Token = TrueToken | FalseToken | IfToken | LeftParenToken ...
@@ -22,6 +23,7 @@ Possible tokens:
 - `}`
 - `else`
 - variable
+- integers
 
 Algebraic data types
 - One type, but different ways to make that type
