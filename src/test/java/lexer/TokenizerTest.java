@@ -11,26 +11,22 @@ import org.junit.Test;
 
 public class TokenizerTest {
     public void assertTokenizes(final String input,
-                                final Token[] expected) {
-        try {
-            final Tokenizer tokenizer = new Tokenizer(input);
-            final List<Token> received = tokenizer.tokenize();
-            assertArrayEquals(expected,
-                              received.toArray(new Token[received.size()]));
-        } catch (final TokenizerException e) {
-            fail("Tokenizer threw exception");
-        }
+                                final Token[] expected) throws TokenizerException {
+        final Tokenizer tokenizer = new Tokenizer(input);
+        final List<Token> received = tokenizer.tokenize();
+        assertArrayEquals(expected,
+                          received.toArray(new Token[received.size()]));
     }
     
     // annotation
     @Test
-    public void testEmptyString() {
+    public void testEmptyString() throws TokenizerException {
         // check that tokenizing empty string works
         assertTokenizes("", new Token[0]);
     }
 
     @Test
-    public void testOnlyWhitespace() {
+    public void testOnlyWhitespace() throws TokenizerException {
         assertTokenizes("    ", new Token[0]);
     }
 
@@ -42,46 +38,46 @@ public class TokenizerTest {
     // "truefalse"
     // "(true"
     @Test
-    public void testTrueByItself() {
+    public void testTrueByItself() throws TokenizerException {
         assertTokenizes("true",
                         new Token[] { new TrueToken() });
     }
     
     // foo
     @Test
-    public void testVariable() {
+    public void testVariable() throws TokenizerException {
         assertTokenizes("foo",
                         new Token[] { new VariableToken("foo") });
     }
 
     // truetrue
     @Test
-    public void testTrueTrueIsVariable() {
+    public void testTrueTrueIsVariable() throws TokenizerException {
         assertTokenizes("truetrue",
                         new Token[]{ new VariableToken("truetrue") });
     }
 
     // true true
     @Test
-    public void testTrueSpaceTrueAreTrueTokens() {
+    public void testTrueSpaceTrueAreTrueTokens() throws TokenizerException {
         assertTokenizes("true true",
                         new Token[]{ new TrueToken(), new TrueToken() });
     }
 
     @Test
-    public void testSingleDigitInteger() {
+    public void testSingleDigitInteger() throws TokenizerException {
         assertTokenizes("1",
                         new Token[]{ new IntegerToken(1) });
     }
 
     @Test
-    public void testMultiDigitInteger() {
+    public void testMultiDigitInteger() throws TokenizerException {
         assertTokenizes("123",
                         new Token[]{ new IntegerToken(123) });
     }
     
     @Test
-    public void testAllRemaining() {
+    public void testAllRemaining() throws TokenizerException {
         assertTokenizes("(){}else if false",
                         new Token[]{
                             new LeftParenToken(),
@@ -93,7 +89,12 @@ public class TokenizerTest {
                             new FalseToken()
                         });
     }
-    
+
+    @Test(expected = TokenizerException.class)
+    public void testInvalid() throws TokenizerException {
+        assertTokenizes("$", null);
+    }
+
     // Test-driven development: write tests first
     // 1. TokenizerTest.  Compile and run.
     // 2. Tokens/Tokenizer
